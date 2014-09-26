@@ -10,10 +10,8 @@ from datetime import date
 if sys.argv.__len__() == 4:
 
 	def main():
-	   data = urllib.urlencode({'name': sys.argv[1], 'nyrs': number_of_years(), 'sex':'N'})
-           response = urllib2.urlopen('http://www.socialsecurity.gov/cgi-bin/babyname.cgi', data)
-
-           doc_tree = BeautifulSoup(response.read())
+           response = make_request()
+           doc_tree = BeautifulSoup(response)
            table = doc_tree.find('table', width='60%')
            data = compose_required_range(table.find_all('tr')[1:-2])
            total = sum(map(lambda d:int(d) ,data.values()))
@@ -36,6 +34,12 @@ if sys.argv.__len__() == 4:
                if int(year) in range(start+1, end+1):
  	          results.append((year,rank))
            return dict(results)
+
+        def make_request():
+ 	   data = urllib.urlencode({'name': sys.argv[1], 'nyrs': number_of_years(), 'sex':'N'})
+           response = urllib2.urlopen('http://www.socialsecurity.gov/cgi-bin/babyname.cgi', data)
+           return response.read()
+   	   
         
 	main()
 
