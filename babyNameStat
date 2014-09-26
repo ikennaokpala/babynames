@@ -47,4 +47,4 @@ if sys.argv.__len__() == 4:
 
 else:
 
-	print 'Error: Check your arguments. Example: ./babyStat [name] [start year] [end year]'
+	print 'Error: Check your arguments. Example: ./babyNameStat [name] [start year] [end year]'
