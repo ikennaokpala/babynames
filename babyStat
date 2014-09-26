@@ -17,9 +17,7 @@ if sys.argv.__len__() == 4:
            table = doc_tree.find('table', width='60%')
            data = compose_required_range(table.find_all('tr')[1:-2])
            total = sum(map(lambda d:int(d) ,data.values()))
-           start = sys.argv[2]
-           end = sys.argv[3]
-           print "Between " + str(start) +" and "+ str(end) +" the total number of male children named "+sys.argv[1]+" was "+ str(total)
+           print "Between " + sys.argv[2] +" and "+ sys.argv[3] +" the total number of male children named "+sys.argv[1]+" was "+ str(total)
 
 	def number_of_years():
 	    return (date.today().year - 1) - 1879
