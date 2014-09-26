@@ -11,8 +11,7 @@ if sys.argv.__len__() == 4:
 
 	def main():
            response = make_request()
-           doc_tree = BeautifulSoup(response)
-           table = doc_tree.find('table', width='60%')
+           table = parse_doc(response) 
            data = compose_required_range(table.find_all('tr')[1:-2])
            total = sum(map(lambda d:int(d) ,data.values()))
            print "Between " + sys.argv[2] +" and "+ sys.argv[3] +" the total number of male children named "+sys.argv[1]+" was "+ str(total)
@@ -39,7 +38,10 @@ if sys.argv.__len__() == 4:
  	   data = urllib.urlencode({'name': sys.argv[1], 'nyrs': number_of_years(), 'sex':'N'})
            response = urllib2.urlopen('http://www.socialsecurity.gov/cgi-bin/babyname.cgi', data)
            return response.read()
-   	   
+
+	def parse_doc(resp):
+	   doc_tree = BeautifulSoup(resp) 
+           return doc_tree.find('table', width='60%')   	   
         
 	main()
 
