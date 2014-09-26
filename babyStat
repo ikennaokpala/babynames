@@ -15,18 +15,30 @@ if sys.argv.__len__() == 4:
 
            doc_tree = BeautifulSoup(response.read())
            table = doc_tree.find('table', width='60%')
-           print compose_dict(table.find_all('tr')[1:-2])
+           data = compose_required_range(table.find_all('tr')[1:-2])
+           total = sum(map(lambda d:int(d) ,data.values()))
+           start = sys.argv[2]
+           end = sys.argv[3]
+           print "Between " + str(start) +" and "+ str(end) +" the total number of male children named "+sys.argv[1]+" was "+ str(total)
 
 	def number_of_years():
 	    return (date.today().year - 1) - 1879
 
-        def compose_dict(trs):
+        def compose_required_range(trs):
 	   rows = {}
 	   for row in trs:
                cells = row.find_all('td')
                rows[cells[0].string.encode('utf-8')] = cells[1].string.encode('utf-8')
-           return rows
- 
+           return time_range(rows, int(sys.argv[2]), int(sys.argv[3]))
+
+
+        def time_range(data, start, end):
+           results = []
+           for year,rank in data.items():
+               if int(year) in range(start+1, end+1):
+ 	          results.append((year,rank))
+           return dict(results)
+        
 	main()
 
 else:
