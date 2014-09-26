@@ -10,17 +10,25 @@ from datetime import date
 if sys.argv.__len__() == 4:
 
 	def main():
-		data = urllib.urlencode({'name': sys.argv[1], 'nyrs': derive_number_of_years(), 'sex':'N'})
-		response = urllib2.urlopen('http://www.socialsecurity.gov/cgi-bin/babyname.cgi', data)
+	   data = urllib.urlencode({'name': sys.argv[1], 'nyrs': number_of_years(), 'sex':'N'})
+           response = urllib2.urlopen('http://www.socialsecurity.gov/cgi-bin/babyname.cgi', data)
 
-		doc_tree = BeautifulSoup(response.read()) 
-		print doc_tree('table', width='60%')
+           doc_tree = BeautifulSoup(response.read())
+           table = doc_tree.find('table', width='60%')
+           print compose_dict(table.find_all('tr')[1:-2])
 
-	def derive_number_of_years():
+	def number_of_years():
 	    return (date.today().year - 1) - 1879
 
-
+        def compose_dict(trs):
+	   rows = {}
+	   for row in trs:
+               cells = row.find_all('td')
+               rows[cells[0].string.encode('utf-8')] = cells[1].string.encode('utf-8')
+           return rows
+ 
 	main()
 
 else:
-	print 'Error: Check your number of arguments'
+
+	print 'Error: Check your arguments. Example: ./babyStat [name] [start year] [end year]'
